@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class movetheball : MonoBehaviour
+public class movetheballautomatic : MonoBehaviour
 {
 
 
@@ -10,7 +11,7 @@ public class movetheball : MonoBehaviour
     //--------------------変数-------------------//
     public bool pauseflag = false;//パス中ならtrueにします
     public bool clearflag = false;//クリア時にtrueを代入してやってくださいクリア画面を立ち上げます<<<<<<<<<-----けいだろーーーーーーーーーーーーーーーーー！
-    bool idouchuu = true;//移動中ならfalse
+    bool idouchuujanai = true;//移動中ならfalse
     public bool restartflag=false;
 
     //    Transform mokutekidown,  mokutekiup;//mokutekiは行くべき場所、nowは今の位置,upは上向きのボール、downは下向きのボール
@@ -32,6 +33,7 @@ public class movetheball : MonoBehaviour
     //-------------------------------------------------
     //内容としては、玉が動き終わって、スマホの方向、位置が与えられたとき、どの方向に何マス動くかというのを返します。
     //返すといっても変数の中に格納しておくだけです。返り値はないです。
+    public bool slidebool = false;//slideする設定ならtrue
 
     int Selectrange(int x, int y, int nowx, int nowy)//このx,yはx方向にどれだけ、y方向も同様なので、通常x,y=1,0・0,1・-1,0・0,-1
     {
@@ -145,9 +147,9 @@ public class movetheball : MonoBehaviour
             downvectornow = balldown.transform.position;
             //ballup.transform.position = Vector3.Slerp(upvectornow, upvectormokuteki, Time.deltaTime);//Lerpですすむ、AnimationCurveであとで速さとか調節、第三引数ようわからないのでデバッグ
             // balldown.transform.position = Vector3.Slerp(downvectornow, downvectormokuteki, Time.deltaTime);
-            if (idouchuu == true && nowrotation != acc.getDirection())//もし移動中じゃないかつスマホの向きが変わっていたら（回転されたら
+            if (idouchuujanai == true && nowrotation != acc.getDirection())//もし移動中じゃないかつスマホの向きが変わっていたら（回転されたら
             {
-                idouchuu = false;//移動中
+                idouchuujanai = false;//移動中
                 nowrotation = acc.getDirection();//スマホの角度代入
                 selectDirectionandrange(nowrotation);//上向きに何マス、下向きに何マス移動するかをメモ
                 kaisuuseigen--;
@@ -155,7 +157,7 @@ public class movetheball : MonoBehaviour
             }
             if (Vector3.Distance(downvectormokuteki, downvectornow) <= kyoyouhanni && Vector3.Distance(upvectormokuteki, upvectornow) <= kyoyouhanni)//スピードを上げたら、この中の値を大きくしないとだめ！
             {
-                idouchuu = true;
+                idouchuujanai = true;
                 if (nowdownx == goaldownx && nowdowny == goaldowny && nowupx == goalupx && nowupy == goalupy)
                 {
                     clearflag = true;

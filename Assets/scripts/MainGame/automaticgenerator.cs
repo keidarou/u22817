@@ -15,6 +15,7 @@ public class automaticgenerator : MonoBehaviour
     public int saiteigenkabe;
     public int ippen;//一辺の長
     public int magarukaisuu;
+    public int goaldownx, goaldowny, goalupx, goalupy;
     public int startupx, startdownx, startupy, startdowny;
     int cnt = 0;
     public int previous = 0;//0は下向き、1は右向き、２は下向き、３は左向き

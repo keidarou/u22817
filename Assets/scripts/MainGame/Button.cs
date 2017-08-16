@@ -12,12 +12,12 @@ public class Button : MonoBehaviour {
 	public GameObject restart;
 	public GameObject quit;
 
-	movetheball script;
+	movetheballautomatic script;
 
 	public void ButtonClick() {
 		switch (transform.name) {
 		case "Pause":
-			script.pauseflag = true;
+                gameobj.GetComponent<movetheballautomatic>().pauseflag = true;
 			break;
 		case "Restart":
 			script.pauseflag = false;
@@ -33,7 +33,7 @@ public class Button : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		script = gameobj.GetComponent<movetheball>(); 
+		script = gameobj.GetComponent<movetheballautomatic>(); 
 	}
 	
 	// Update is called once per frame

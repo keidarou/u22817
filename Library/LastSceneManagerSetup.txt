@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/scene/endlessmodeeasy.unity
+- path: Assets/scene/FriendsMap.unity
   isLoaded: 1
   isActive: 1

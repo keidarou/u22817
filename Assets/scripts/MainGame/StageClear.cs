@@ -13,11 +13,11 @@ public class StageClear : MonoBehaviour {
 	public GameObject replay;
 	public GameObject next;
 
-	movetheball script;
+	movetheballautomatic script;
 
 	// Use this for initialization
 	void Start () {
-		script = gameobj.GetComponent<movetheball>();//scriptしゅとく
+		script = gameobj.GetComponent<movetheballautomatic>();//scriptしゅとく
 		text.SetActive(false);
 		tweetbtn.SetActive(false);
 		replay.SetActive(false);

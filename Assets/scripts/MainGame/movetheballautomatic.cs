@@ -13,7 +13,8 @@ public class movetheballautomatic : MonoBehaviour
     public bool clearflag = false;//クリア時にtrueを代入してやってくださいクリア画面を立ち上げます<<<<<<<<<-----けいだろーーーーーーーーーーーーーーーーー！
     bool idouchuujanai = true;//移動中ならfalse
     public bool slidebool = false;//slideする設定ならtrue
-
+    public int nannido;
+    public bool automaticmode;//オートマチックならtrueで
     //    Transform mokutekidown,  mokutekiup;//mokutekiは行くべき場所、nowは今の位置,upは上向きのボール、downは下向きのボール
     int nowrotation;//今のスマホの回転度
     GetAcc acc;//どれくらい回転しているかをみるため
@@ -134,15 +135,18 @@ public class movetheballautomatic : MonoBehaviour
         nowrotation = 0;//最初のスマホの角度代入
         upvectormokuteki = ballup.transform.position;
         downvectormokuteki = balldown.transform.position;
-        goaldownx = mapgenerator.GetComponent<automaticgenerator>().downx;
-        goaldowny = mapgenerator.GetComponent<automaticgenerator>().downy;
-        goalupx = mapgenerator.GetComponent<automaticgenerator>().nowx;
-        goalupy = mapgenerator.GetComponent<automaticgenerator>().nowy;
-        startupintx = mapgenerator.GetComponent<automaticgenerator>().startupx;
-        startupinty = mapgenerator.GetComponent<automaticgenerator>().startupy;
-        startdownintx = mapgenerator.GetComponent<automaticgenerator>().startdownx;
-        startdowninty = mapgenerator.GetComponent<automaticgenerator>().startdowny;
-
+        if (automaticmode)//もしおーとまちっくじゃないならもともといれておいて、startは変数nannidoをつかって条件分岐
+        {
+            goaldownx = mapgenerator.GetComponent<automaticgenerator>().downx;
+            goaldowny = mapgenerator.GetComponent<automaticgenerator>().downy;
+            goalupx = mapgenerator.GetComponent<automaticgenerator>().nowx;
+            goalupy = mapgenerator.GetComponent<automaticgenerator>().nowy;
+            startupintx = mapgenerator.GetComponent<automaticgenerator>().startupx;
+            startupinty = mapgenerator.GetComponent<automaticgenerator>().startupy;
+            startdownintx = mapgenerator.GetComponent<automaticgenerator>().startdownx;
+            startdowninty = mapgenerator.GetComponent<automaticgenerator>().startdowny;
+        }
+       
         //フォントさくせい
         /* Debug.Log("up");
          Debug.Log(Selectrange(0, -1, nowdownx, nowdowny));
@@ -161,7 +165,6 @@ public class movetheballautomatic : MonoBehaviour
     void Update()
     {
         if (slidebool) { houkoudetomatteiruka = true; }
-        timecounter = GameObject.Find("timecounter");
         if (pauseflag == false)
         {
             if (gameoverflag == true)
@@ -182,7 +185,7 @@ public class movetheballautomatic : MonoBehaviour
                     tomatteirutaimu += Time.deltaTime;
                     if (tomatteirutaimu > 0.6f) { houkoudetomatteiruka = true; tomatteirutaimu = 0; }
                 }
-                if (idouchuujanai == true && houkoudetomatteiruka)//もし移動中じゃないかつスマホの向きが変わっていたら（回転されたら
+                if (idouchuujanai == true && houkoudetomatteiruka && !pauseflag)//もし移動中じゃないかつスマホの向きが変わっていたら（回転されたら
                 {
                     idouchuujanai = false;//移動中
                     nowrotation = acc.getDirection();//スマホの角度代入
@@ -193,72 +196,83 @@ public class movetheballautomatic : MonoBehaviour
                 if (Vector3.Distance(downvectormokuteki, downvectornow) <= kyoyouhanni && Vector3.Distance(upvectormokuteki, upvectornow) <= kyoyouhanni)//スピードを上げたら、この中の値を大きくしないとだめ！
                 {
                     if (!slidebool)
+                    {
+                        houkoudetomatteiruka = false;
+                    }
+                    idouchuujanai = true;
+                    if (nowdownx == goaldownx && nowdowny == goaldowny && nowupx == goalupx && nowupy == goalupy)
+                    {
+                        clearflag = true;
+                        if (automaticmode)
                         {
-                            houkoudetomatteiruka = false;
-                        }
-                        idouchuujanai = true;
-                        if (nowdownx == goaldownx && nowdowny == goaldowny && nowupx == goalupx && nowupy == goalupy)
-                        {
-                            clearflag = true;
                             GameObject mapgen = GameObject.Find("mapgenerator");
-                            codemaker codemake = mapgen.GetComponent<codemaker>();
-                            Debug.Log(codemake.normal());
-                            timecounter.GetComponent<timelimitandmemory>().zenkaivoid();
-                            SceneManager.LoadScene(scenename);
-                        }
-                        if (nowdownx == goalupx && nowdowny == goalupy && nowupx == goaldownx && nowupy == goaldowny)
-                        {
-                            clearflag = true;
-                            GameObject mapgen = GameObject.Find("mapgenerator");
-                            codemaker codemake = mapgen.GetComponent<codemaker>();
-                            Debug.Log(codemake.normal());
+                            timecounter = GameObject.Find("timecounter");
+                            timecounter.GetComponent<timelimitandmemory>().goalupdate(nannido);
                             timecounter.GetComponent<timelimitandmemory>().zenkaivoid();
                             SceneManager.LoadScene(scenename);
                         }
                     }
-                    if (Vector3.Distance(downvectormokuteki, downvectornow) <= kyoyouhanni || Vector3.Distance(upvectormokuteki, upvectornow) <= kyoyouhanni)//スピードを上げたら、この中の値を大きくしないとだめ！
+                    if (nowdownx == goalupx && nowdowny == goalupy && nowupx == goaldownx && nowupy == goaldowny)
                     {
-                        if (shougaibutuniatatteruyoflag == true)
+                        clearflag = true;
+                        if (automaticmode)
                         {
-                            //    Debug.Log(downvectormokuteki); Debug.Log(downvectornow);
-                            gameoverflag = true;
+                            GameObject mapgen = GameObject.Find("mapgenerator");
+                            timecounter = GameObject.Find("timecounter");
+                            timecounter.GetComponent<timelimitandmemory>().goalupdate(nannido);
+                            timecounter.GetComponent<timelimitandmemory>().zenkaivoid();
+                            SceneManager.LoadScene(scenename);
+                        }
+                    }
+                }
+                if (Vector3.Distance(downvectormokuteki, downvectornow) <= kyoyouhanni || Vector3.Distance(upvectormokuteki, upvectornow) <= kyoyouhanni)//スピードを上げたら、この中の値を大きくしないとだめ！
+                {
+                    if (shougaibutuniatatteruyoflag == true)
+                    {
+                        //    Debug.Log(downvectormokuteki); Debug.Log(downvectornow);
+                        gameoverflag = true;
+                        if (automaticmode)
+                        {
                             GameObject timelimit = GameObject.Find("timecounter");
                             timelimitandmemory script = timelimit.GetComponent<timelimitandmemory>();
                             script.gameovernisaseru();
-                            return;
                         }
+                        return;
                     }
-
-                    if (Vector3.Distance(upvectormokuteki, upvectornow) >= kyoyouhanni)
-                    {
-                        directionup = (upvectormokuteki - upvectornow).normalized;
-                        ballup.transform.Translate(directionup * Time.deltaTime * speed, Space.World);
-                    }
-                    if (Vector3.Distance(downvectormokuteki, downvectornow) >= kyoyouhanni)
-                    {
-                        directiondown = (downvectormokuteki - downvectornow).normalized;
-                        balldown.transform.Translate(directiondown * Time.deltaTime * speed, Space.World);
-                    }
-
-                    //  ballup.transform.position = upvectormokuteki;
-                    // balldown.transform.position = downvectormokuteki;
                 }
-            }
-            if (restartflag)
-            {
-                balldown.transform.position = startdown;
-                ballup.transform.position = startup;
-                downvectormokuteki = startdown;
-                downvectornow = startdown;
-                upvectormokuteki = startup;
-                upvectornow = startup;
-                nowdownx = startdownintx;
-                nowupx = startupintx;
-                nowdowny = startdowninty;
-                nowupy = startupinty;
-                restartflag = false;
+
+                if (Vector3.Distance(upvectormokuteki, upvectornow) >= kyoyouhanni)
+                {
+                    directionup = (upvectormokuteki - upvectornow).normalized;
+                    ballup.transform.Translate(directionup * Time.deltaTime * speed, Space.World);
+                }
+                if (Vector3.Distance(downvectormokuteki, downvectornow) >= kyoyouhanni)
+                {
+                    directiondown = (downvectormokuteki - downvectornow).normalized;
+                    balldown.transform.Translate(directiondown * Time.deltaTime * speed, Space.World);
+                }
+
+                //  ballup.transform.position = upvectormokuteki;
+                // balldown.transform.position = downvectormokuteki;
             }
         }
-    
+        if (restartflag)
+        {
+            nowrotation = 0;
+            acc.ret = 0;
+            balldown.transform.position = startdown;
+            ballup.transform.position = startup;
+            downvectormokuteki = startdown;
+            downvectornow = startdown;
+            upvectormokuteki = startup;
+            upvectornow = startup;
+            nowdownx = startdownintx;
+            nowupx = startupintx;
+            nowdowny = startdowninty;
+            nowupy = startupinty;
+            restartflag = false;
+        }
+    }
+
 }
 //map[y][x]、縦に移動するときはぎゃく！（配列の性質的に、上の方が小さい

@@ -14,11 +14,13 @@ public class timelimitandmemory : MonoBehaviour
     public string scenename;
     private GUIStyle Highscore;
     public bool gameoverflag = false;
-    float timer;
+    float timer=0;
     public bool pauseorquitflag = false;
     movetheballautomatic script;
     public GameObject movetheballl;
-   
+    float zenkaiclear = 0;
+    float saichouclear=0;
+    public string code;
     public void gameovernisaseru()
     {
         gameoverflag = true;
@@ -34,6 +36,25 @@ public class timelimitandmemory : MonoBehaviour
     {
         get { return _instance ?? (_instance = FindObjectOfType<timelimitandmemory>()); }
     }
+
+
+    public void goalupdate(int level){
+        if (timer - zenkaiclear > saichouclear)
+        {
+            saichouclear = timer - zenkaiclear;
+            /*ここにスクリーンショットを保存するコードを書いて！！*/
+
+
+
+            GameObject codemake = GameObject.Find("mapgenerator");
+            codemaker script = codemake.GetComponent<codemaker>();
+            if (level == 1) { code=script.easy(); }
+            if (level == 2) { code = script.normal(); }
+            if (level == 3) { code = script.hard(); }
+        }
+        zenkaiclear = timer;
+    }
+
 
     void Awake()
     {

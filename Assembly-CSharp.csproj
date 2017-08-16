@@ -59,6 +59,7 @@
      <Compile Include="Assets\scripts\MainGame\Button1.cs" />
      <Compile Include="Assets\scripts\MainGame\buttonforendlessstageselect.cs" />
      <Compile Include="Assets\scripts\MainGame\codemaker.cs" />
+     <Compile Include="Assets\scripts\MainGame\codevisualizer.cs" />
      <Compile Include="Assets\scripts\MainGame\GetAcc.cs" />
      <Compile Include="Assets\scripts\MainGame\mapgenerator.cs" />
      <Compile Include="Assets\scripts\MainGame\movetheball.cs" />
