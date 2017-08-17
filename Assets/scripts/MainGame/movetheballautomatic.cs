@@ -18,7 +18,7 @@ public class movetheballautomatic : MonoBehaviour
     //    Transform mokutekidown,  mokutekiup;//mokutekiは行くべき場所、nowは今の位置,upは上向きのボール、downは下向きのボール
     int nowrotation;//今のスマホの回転度
     GetAcc acc;//どれくらい回転しているかをみるため
-    public GameObject mapgenerator, balldown, ballup;//それぞれのゲームオブジェクト、分からなければ連絡よろ
+    public GameObject mapgenerator, balldown, ballup,movetheballGameobj;//それぞれのゲームオブジェクト、分からなければ連絡よろ
     int[,] map = new int[50, 50];//マップ
     public bool gameoverflag;
     public bool shougaibutuniatatteruyoflag = false;
@@ -128,8 +128,10 @@ public class movetheballautomatic : MonoBehaviour
     void Start()
     {
         //  mapgenerator = GameObject.Find("mapgenerator");//mapgeneratorからmapの配列をひくため、ただ、これ呼ばれる順番が怪しい
+        if (automaticmode) { 
         map = mapgenerator.GetComponent<automaticgenerator>().map;//これ、こっちの方が速く実行されていたらしぬので、そこを注意
-        acc = GetComponent<GetAcc>();//GetAccスクリプト
+        }
+        acc = movetheballGameobj. GetComponent<GetAcc>();//GetAccスクリプト
         startup = ballup.transform.position;
         startdown = balldown.transform.position;
         nowrotation = 0;//最初のスマホの角度代入
